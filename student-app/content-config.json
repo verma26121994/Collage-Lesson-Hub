@@ -1,0 +1,6 @@
+{
+  "contentSource": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRBeAW6VxMbd7Bf0CGdV0DsTDUrCpvmR5V0W9cwTgVSNpsRpnGNwzVnVqtfi87Bjb47-RebADBDCIBd/pub?gid=0&single=true&output=csv",
+  "refreshSeconds": 60,
+  "statusField": "Status",
+  "publishedValue": "Published"
+}

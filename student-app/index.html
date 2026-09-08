@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16324f">
+<meta name="description" content="College Lesson Hub – simple student lesson library.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="styles.css">
+<title>College Lesson Hub</title>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand-wrap">
+    <div class="brand-mark">CL</div>
+    <div><div class="brand">College Lesson Hub</div><div class="brand-sub">Your study material in one place</div></div>
+  </div>
+</header>
+
+<main>
+  <div id="status" class="status" role="status">Loading your subjects…</div>
+
+  <section id="homeView" class="view">
+    <div class="welcome">
+      <div class="eyebrow">STUDENT LIBRARY</div>
+      <h1>My Subjects</h1>
+      <p>Choose a subject to open its units and lessons.</p>
+    </div>
+    <div id="subjects" class="grid"></div>
+    <div id="empty" class="empty" hidden>No published lessons are available yet.</div>
+  </section>
+
+  <section id="subjectView" class="view" hidden>
+    <button class="back" type="button" onclick="goHome()">← All Subjects</button>
+    <div class="page-heading">
+      <div id="subjectIcon" class="folder-icon large">📚</div>
+      <div><div class="eyebrow">SUBJECT</div><h1 id="subjectTitle"></h1><p id="subjectMeta"></p></div>
+    </div>
+    <div id="units" class="unit-list"></div>
+  </section>
+
+  <section id="unitView" class="view" hidden>
+    <button class="back" type="button" onclick="goSubject()">← Back to Subject</button>
+    <div class="page-heading compact">
+      <div class="folder-icon large">📁</div>
+      <div><div class="eyebrow">UNIT</div><h1 id="unitTitle"></h1><p id="unitMeta"></p></div>
+    </div>
+    <div id="lectures" class="lecture-list"></div>
+  </section>
+</main>
+
+<footer>College Lesson Hub <span>•</span> Student App</footer>
+
+<script>
+const CONFIG_URL='content-config.json';
+const FALLBACK=[{Subject:'Environmental Laws',Unit:'Unit 1',Lecture:'Nature and Concept of Environment',Description:'Interactive classroom lesson plan.',PDF:'Lesson_1_Nature_and_Concept_of_Environment.pdf',Status:'Published'}];
+let allPublished=[];
+let currentSubject='';
+let currentUnit='';
+
+function clean(v){return String(v??'').trim()}
+function get(row,...names){for(const n of names){if(clean(row[n]))return clean(row[n]);}return ''}
+function parseCSV(text){
+  const rows=[];let row=[],cell='',quoted=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(quoted){if(c==='"'&&n==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}
+    else if(c==='"')quoted=true;
+    else if(c===','){row.push(cell.trim());cell='';}
+    else if(c==='\n'){row.push(cell.trim());rows.push(row);row=[];cell='';}
+    else if(c!=='\r')cell+=c;
+  }
+  if(cell.length||row.length){row.push(cell.trim());rows.push(row)}
+  if(!rows.length)return [];
+  const headers=rows.shift().map(h=>h.replace(/^\uFEFF/,''));
+  return rows.filter(r=>r.some(Boolean)).map(r=>Object.fromEntries(headers.map((h,j)=>[h,r[j]??''])));
+}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function pdfFor(row){return get(row,'PDF Link','PDF','Pdf Link','pdf_link','File URL','URL')}
+function subjectName(row){return get(row,'Subject','subject')||'Subject'}
+function unitName(row){return get(row,'Unit','unit')||'Lessons'}
+function lectureName(row,i){return get(row,'Lecture','Lesson','Title','Lecture Title')||`Lecture ${i+1}`}
+function description(row){return get(row,'Description','description')||'Lesson plan and study material.'}
+
+function setStatus(text,show=true){const el=document.getElementById('status');el.textContent=text;el.hidden=!show}
+function showOnly(id){['homeView','subjectView','unitView'].forEach(x=>document.getElementById(x).hidden=x!==id)}
+
+function renderHome(){
+  showOnly('homeView');
+  const root=document.getElementById('subjects');root.innerHTML='';
+  const map=new Map();
+  allPublished.forEach(r=>{const s=subjectName(r);if(!map.has(s))map.set(s,[]);map.get(s).push(r)});
+  if(!map.size){document.getElementById('empty').hidden=false;return}
+  document.getElementById('empty').hidden=true;
+  [...map.entries()].forEach(([subject,items])=>{
+    const units=new Set(items.map(unitName));
+    const card=document.createElement('button');card.className='subject-card';card.type='button';
+    card.innerHTML=`<span class="folder-icon">📚</span><span class="card-text"><strong>${escapeHtml(subject)}</strong><small>${units.size} ${units.size===1?'unit':'units'} • ${items.length} ${items.length===1?'lesson':'lessons'}</small></span><span class="arrow">›</span>`;
+    card.onclick=()=>openSubject(subject);root.appendChild(card);
+  });
+}
+
+function openSubject(subject){
+  currentSubject=subject;currentUnit='';
+  document.getElementById('subjectTitle').textContent=subject;
+  const items=allPublished.filter(r=>subjectName(r)===subject);
+  const units=[...new Set(items.map(unitName))];
+  document.getElementById('subjectMeta').textContent=`${units.length} ${units.length===1?'unit':'units'} • ${items.length} ${items.length===1?'lesson':'lessons'}`;
+  const root=document.getElementById('units');root.innerHTML='';
+  units.forEach(unit=>{
+    const count=items.filter(r=>unitName(r)===unit).length;
+    const card=document.createElement('button');card.className='unit-card';card.type='button';
+    card.innerHTML=`<span class="folder-icon">📁</span><span class="card-text"><strong>${escapeHtml(unit)}</strong><small>${count} ${count===1?'lesson':'lessons'}</small></span><span class="arrow">›</span>`;
+    card.onclick=()=>openUnit(unit);root.appendChild(card);
+  });
+  showOnly('subjectView');window.location.hash='subject';window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openUnit(unit){
+  currentUnit=unit;
+  const items=allPublished.filter(r=>subjectName(r)===currentSubject&&unitName(r)===unit);
+  document.getElementById('unitTitle').textContent=unit;
+  document.getElementById('unitMeta').textContent=`${items.length} ${items.length===1?'lesson':'lessons'}`;
+  const root=document.getElementById('lectures');root.innerHTML='';
+  items.forEach((r,i)=>{
+    const pdf=pdfFor(r);const card=document.createElement('article');card.className='lecture-card';
+    const title=lectureName(r,i);
+    card.innerHTML=`<div class="lecture-number">${String(i+1).padStart(2,'0')}</div><div class="lecture-body"><div class="eyebrow">LECTURE</div><h2>${escapeHtml(title)}</h2><p>${escapeHtml(description(r))}</p>${pdf?`<a class="pdf-btn" href="${escapeHtml(pdf)}" target="_blank" rel="noopener">📄 Open Lesson PDF</a>`:`<span class="unavailable">PDF not added yet</span>`}</div>`;
+    root.appendChild(card);
+  });
+  showOnly('unitView');window.location.hash='unit';window.scrollTo({top:0,behavior:'smooth'});
+}
+function goHome(){currentSubject='';currentUnit='';showOnly('homeView');window.location.hash='';window.scrollTo({top:0,behavior:'smooth'})}
+function goSubject(){if(currentSubject)openSubject(currentSubject);else goHome()}
+
+async function load(){
+  try{
+    const cfg=await fetch(CONFIG_URL,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Config unavailable');return r.json()});
+    const csv=await fetch(cfg.contentSource,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Sheet unavailable');return r.text()});
+    const data=parseCSV(csv);
+    allPublished=data.filter(r=>clean(get(r,'Status','status')).toLowerCase()==='published');
+    setStatus(`Live library • ${allPublished.length} published ${allPublished.length===1?'lesson':'lessons'}`,true);
+    renderHome();
+  }catch(e){
+    allPublished=FALLBACK.filter(r=>r.Status==='Published');
+    setStatus('Showing saved lessons • live library is temporarily unavailable',true);
+    renderHome();
+  }
+}
+load();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>

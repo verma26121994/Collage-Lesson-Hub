@@ -1,19 +1,17 @@
-# Student App
+# College Lesson Hub — Student App
 
-The Student App is the public-facing Progressive Web App.
+The student-facing Progressive Web App for College Lesson Hub.
 
-## User Flow
+## Student Flow
 
-1. Open the app.
-2. Select a subject.
-3. Select a unit.
-4. Select a lecture.
-5. Open the lecture PDF.
+**Subjects → Units → Lectures → Open Lesson PDF**
 
-The app is intentionally focused on learning material and does not require students to repeatedly download a new app when teachers publish new lessons.
+The app is designed to be simple and mobile-first. Published lesson metadata is loaded from the configured content source, while lecture PDFs are opened from their configured file links.
 
-## Deployment
+## PWA
 
-The production student app is designed for GitHub Pages.
+The project includes a web app manifest and service worker for an installable app experience.
 
-Private spreadsheet edit URLs, teacher credentials, and deployment secrets should never be committed here.
+## Portfolio Note
+
+This folder contains the student-facing portion of the project. Private teacher/admin configuration should not be committed to the public repository.
