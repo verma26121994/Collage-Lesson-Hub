@@ -1,109 +1,84 @@
-# College Lesson Hub
+# 🎓 College Lesson Hub
 
-A mobile-first, installable Progressive Web App (PWA) for organizing and distributing college learning materials.
+> **A mobile-first Progressive Web App (PWA) for colleges to organize and distribute learning materials through a teacher-managed content system.**
 
-## Overview
+[![PWA](https://img.shields.io/badge/App-PWA-blue)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+[![GitHub Pages](https://img.shields.io/badge/Hosting-GitHub%20Pages-black)](https://pages.github.com/)
+[![Google Apps Script](https://img.shields.io/badge/Backend-Google%20Apps%20Script-green)](https://developers.google.com/apps-script)
+[![Google Sheets](https://img.shields.io/badge/Data-Google%20Sheets-34A853)](https://www.google.com/sheets/about/)
 
-College Lesson Hub provides a simple learning-content workflow:
+## 🚀 Live Student App
 
-**Teacher Dashboard → Google Sheets → Student PWA → Lecture PDFs**
+**[Open College Lesson Hub](https://verma26121994.github.io/collage-app/)**
 
-Teachers can manage subjects, units, lectures, publication status, and PDF resources. Students use a lightweight PWA to browse published learning material without repeatedly reinstalling the app when new lessons are published.
+The student application can be opened on a phone or computer and installed as a PWA where supported.
 
-## Key Features
+---
 
-- Installable Progressive Web App
-- Mobile-friendly student interface
+## 💡 Problem
+
+College learning material is often distributed through scattered WhatsApp messages, PDFs, links, and manual communication.
+
+This project was designed to provide a simple centralized experience where:
+
+**Subject → Unit → Lecture → PDF**
+
+Students can access published learning material from one application.
+
+---
+
+## 🛠️ Solution
+
+College Lesson Hub separates the **student experience** from the **teacher content-management workflow**.
+
+### 👨‍🎓 Student Side
+
+- Mobile-first interface
+- Installable PWA
 - Subject → Unit → Lecture navigation
-- PDF-based lecture material
-- Google Sheets as the content/data layer
-- Google Apps Script teacher administration
-- Google Drive PDF storage
+- Direct access to lecture PDFs
+- Simple learning-focused interface
+- New published lessons can appear without reinstalling the application
+
+### 👨‍🏫 Teacher Side
+
+- Private Teacher Dashboard
+- Subject management
+- Unit management
+- Lecture management
+- PDF upload
 - Publish/unpublish workflow
+- Dashboard statistics
 - Teacher authorization
-- GitHub Pages hosting
-- New published lessons can appear in the existing student app
+- Google Sheets-backed content management
 
-## Technology Stack
+---
 
-- HTML
-- CSS
-- JavaScript
-- Progressive Web App (PWA)
-- GitHub Pages
-- Google Apps Script
-- Google Sheets
-- Google Drive
-
-## Architecture
+## 🏗️ Architecture
 
 ```text
-                 ┌──────────────────────┐
-                 │   Teacher Dashboard  │
-                 │   Google Apps Script │
-                 └──────────┬───────────┘
-                            │
-                            ▼
-                 ┌──────────────────────┐
-                 │     Google Sheets    │
-                 │ Subjects / Units /   │
-                 │ Lectures / Status    │
-                 └──────────┬───────────┘
-                            │
-                       Published Data
-                            │
-                            ▼
-                 ┌──────────────────────┐
-                 │     Student PWA      │
-                 │     GitHub Pages     │
-                 └──────────┬───────────┘
-                            │
-                            ▼
-                 ┌──────────────────────┐
-                 │   Lecture PDF Files  │
-                 │     Google Drive     │
-                 └──────────────────────┘
-```
-
-## Project Structure
-
-```text
-college-lesson-hub/
-├── README.md
-├── LICENSE
-├── .gitignore
-├── student-app/
-│   └── README.md
-├── teacher-dashboard/
-│   ├── Code.gs
-│   └── README.md
-└── documentation/
-    ├── architecture.md
-    └── setup-guide.md
-```
-
-## Portfolio Value
-
-This project demonstrates practical skills in:
-
-- Product and UI thinking
-- PWA development
-- Content-management workflows
-- Google Apps Script automation
-- Spreadsheet-backed applications
-- Cloud file integration
-- Access-control concepts
-- Static web deployment
-- Documentation and system architecture
-
-## Security Note
-
-This public portfolio repository intentionally does **not** contain private deployment URLs, teacher email addresses, spreadsheet edit URLs, credentials, or sensitive IDs.
-
-## Live Demo
-
-The live student application can be added here after publishing the repository.
-
-## Author
-
-Built as a practical education technology project and portfolio piece.
+┌─────────────────────────┐
+│    Teacher Dashboard    │
+│    Google Apps Script   │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│      Google Sheets      │
+│ Subjects / Units /      │
+│ Lectures / Status       │
+└────────────┬────────────┘
+             │
+       Published Content
+             │
+             ▼
+┌─────────────────────────┐
+│      Student PWA        │
+│      GitHub Pages       │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│      Google Drive       │
+│      Lecture PDFs       │
+└─────────────────────────┘
