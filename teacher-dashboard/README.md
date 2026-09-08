@@ -1,19 +1,25 @@
 # Teacher Dashboard
 
-The Teacher Dashboard is the private administration layer built with Google Apps Script.
+Private administration layer for College Lesson Hub, built with Google Apps Script.
 
-## Responsibilities
+## What it demonstrates
 
-- Manage subjects
-- Manage units
-- Manage lectures
-- Upload lecture PDFs
-- Publish/unpublish content
-- Maintain the Google Sheets content database
-- Control teacher-only operations
+- Teacher authorization
+- Subject management
+- Unit management
+- Lecture management
+- Publish/unpublish workflow
+- Google Sheets integration
+- Google Drive PDF upload
+- Dashboard statistics
+- Server-side validation and synchronization
 
-## Security
+## Portfolio Version
 
-The production deployment should remain private/restricted. Do not publish teacher credentials, private deployment URLs, spreadsheet edit URLs, or other sensitive configuration in this repository.
+`Code.gs` is a **sanitized portfolio copy**. Production spreadsheet IDs, teacher email addresses, and deployment details have been replaced with placeholders.
 
-A sanitized copy of the production Apps Script can be placed here for portfolio demonstration.
+Do not use this public copy as a drop-in production deployment without configuring the placeholders and reviewing access settings.
+
+## Production Architecture
+
+Teacher Dashboard → Google Apps Script → Google Sheets / Google Drive → Student PWA
