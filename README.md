@@ -82,3 +82,23 @@ College Lesson Hub separates the **student experience** from the **teacher conte
 │      Google Drive       │
 │      Lecture PDFs       │
 └─────────────────────────┘
+## 📱 Student App Screenshots
+
+### Home — Subject Library
+![Student App Home](documentation/screenshots/student-home.png)
+
+### Subject View
+![Subject View](documentation/screenshots/subject-page.png)
+
+### Lecture List
+![Lecture List](documentation/screenshots/lecture-page.png)
+
+---
+
+## 👨‍🏫 Teacher Dashboard
+
+### Dashboard
+![Teacher Dashboard](documentation/screenshots/teacher-dashboard.png)
+
+### Subject Management
+![Subject Management](documentation/screenshots/subject-management.png)
