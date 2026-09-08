@@ -82,9 +82,7 @@ College Lesson Hub separates the **student experience** from the **teacher conte
 │      Google Drive       │
 │      Lecture PDFs       │
 └─────────────────────────┘
-```markdown
 ## 📱 Student App Screenshots
-
 ### Home — Subject Library
 ![Student App Home](documentation/screenshots/student-home.png)
 
