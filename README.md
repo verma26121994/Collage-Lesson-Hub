@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="college-lesson-hub-banner.png" alt="College Lesson Hub" width="100%">
+</p>
+
+---
 # 🎓 College Lesson Hub
 
 > A mobile-first Progressive Web App (PWA) for colleges to organize and distribute learning materials through a teacher-managed content system.
